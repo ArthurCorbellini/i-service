@@ -10,7 +10,12 @@ router
   .route("/top-5-cheap")
   .get(controller.aliasTopTours, controller.getAllTours);
 
+router.route("/tour-stats").get(controller.getToursStats);
+
+router.route("/monthly-plan/:year").get(controller.getMonthlyPlan);
+
 router.route("/").get(controller.getAllTours).post(controller.createTour);
+
 router
   .route("/:id")
   .get(controller.getTour)

@@ -3,7 +3,7 @@ const dotenv = require("dotenv"); // Salva na aplicação as variáveis de ambie
 
 dotenv.config({ path: "./config.env" });
 
-const app = require("./app");
+const app = require("./src/app");
 
 const db = process.env.DATABASE.replace(
   "<PASSWORD>",
