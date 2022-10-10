@@ -5,8 +5,9 @@ class APIFeatures {
   }
 
   filter() {
-    // { ...this.queryString } clona o objeto e remove as "palavras reservadas" (futuramente serão usadas)
+    // { ...this.queryString } clona o objeto;
     const queryObj = { ...this.queryString };
+    // remove as "palavras reservadas" (futuramente serão usadas);
     ["page", "sort", "limit", "fields"].forEach((el) => delete queryObj[el]);
 
     // 1) Filtros avançados

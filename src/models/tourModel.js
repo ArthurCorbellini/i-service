@@ -6,35 +6,35 @@ const schema = mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "name required!"],
+      required: [true, "Name required!"],
       unique: true,
       trim: true,
-      maxlength: [40, "maxlength less or equal than 40 characteres"],
-      minlength: [10, "maxlength more or equal than 10 characteres"],
+      maxlength: [40, "Name less or equal than 40 characteres"],
+      minlength: [10, "Name more or equal than 10 characteres"],
       // validate: [validator.isAlpha, "tour name must only contain characters"],
     },
     slug: String,
     duration: {
       type: Number,
-      required: [true, "duration required!"],
+      required: [true, "Duration required!"],
     },
     maxGroupSize: {
       type: Number,
-      required: [true, "maxGroupSize required!"],
+      required: [true, "MaxGroupSize required!"],
     },
     difficulty: {
       type: String,
-      required: [true, "difficulty required!"],
+      required: [true, "Difficulty required!"],
       enum: {
         values: ["easy", "medium", "difficult"],
-        message: "difficulty is either: easy, medium ou difficult",
+        message: "Difficulty is either: easy, medium ou difficult",
       },
     },
     ratingsAverage: {
       type: Number,
       default: 4.5,
-      min: [1, "ratingsAverage must be above 1.0"],
-      max: [5, "ratingsAverage must be below 5.0"],
+      min: [1, "RatingsAverage must be above 1.0"],
+      max: [5, "RatingsAverage must be below 5.0"],
     },
     ratingsQuantity: {
       type: Number,
@@ -42,7 +42,7 @@ const schema = mongoose.Schema(
     },
     price: {
       type: Number,
-      required: [true, "price required!"],
+      required: [true, "Price required!"],
     },
     priceDiscount: {
       type: Number,
@@ -52,13 +52,13 @@ const schema = mongoose.Schema(
           // logo, em updates, essa functon não vai funcionar
           return val < this.price;
         },
-        message: "priceDiscount ({VALUE}) must be less than the price",
+        message: "PriceDiscount ({VALUE}) must be less than the price",
       },
     },
     summary: {
       type: String,
       trim: true,
-      required: [true, "summary required!"],
+      required: [true, "Summary required!"],
     },
     description: {
       type: String,
@@ -66,7 +66,7 @@ const schema = mongoose.Schema(
     },
     imageCover: {
       type: String,
-      required: [true, "imageCover required!"],
+      required: [true, "ImageCover required!"],
     },
     images: [String],
     createdAt: {

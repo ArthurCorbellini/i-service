@@ -1,8 +1,17 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv"); // Salva na aplicação as variáveis de ambiente listada no arquivo de configuração;
 
-dotenv.config({ path: "./config.env" });
+// todos os erros que ocorrem em código síncrono e que não forem tratados em nenhum lugar são chamados de "uncaught
+// exceptions" e irão acionar o eventListener abaixo:
+//  -> esse eventListener precisa ficar no topo da aplicação;
+process.on("uncaughtException", (err) => {
+  console.log(" ------------ UNCAUGHT EXCEPTION!");
+  console.log(err.name, err.message);
+  console.log(" ------------ UNCAUGHT EXCEPTION! Shutting down!");
+  process.exit(1);
+});
 
+dotenv.config({ path: "./config.env" });
 const app = require("./src/app");
 
 const db = process.env.DATABASE.replace(
@@ -22,6 +31,17 @@ mongoose
 // console.log(process.env);
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
+});
+
+// caso alguma promessa for rejeitada fora do escopo do Express e essa promessa não for tratada em
+// nenhum outro lugar, o eventListener abaixo é acionado;
+process.on("unhandledRejection", (err) => {
+  console.log(" ------------ UNHANDLED REJECTION!");
+  console.log(err.name, err.message);
+  console.log(" ------------ UNHANDLED REJECTION! Shutting down!");
+  server.close(() => {
+    process.exit(1);
+  });
 });
