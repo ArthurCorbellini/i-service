@@ -21,6 +21,12 @@ const handleValidationErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
+const handleJWTError = () =>
+  new AppError("Invalid token. Please log in again!", 401);
+
+const handleJWTExpiredError = () =>
+  new AppError("Token expired. Please log in again!", 401);
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -59,9 +65,10 @@ module.exports = (err, req, res, next) => {
   } else if (process.env.NODE_ENV === "production") {
     let error = { ...err };
 
+    // erros que não possuem o atributo "isOperational" e também devem ser tratados;
+
     // erros vindos do model;
-    //  -> são disparados por ele mesmo e, por isso, não possuem o atributo "isOperational";
-    //  -> sendo assim, é preciso tratar os erros do mongoose antes (isOperational = true);
+    //  -> é preciso tratar os erros do mongoose antes (isOperational = true);
     //  -> o banco pode disparar três dipos de erros distintos:
     //     -> name: "CastError" - quando o tipo do parâmetro passado na request não é válido para aquele parâmetro
     //        por exemplo passar uma String em um parâmetro tipo Number;
@@ -70,6 +77,10 @@ module.exports = (err, req, res, next) => {
     if (err.name === "CastError") error = handleCastErrorDB(err);
     if (err.name === "ValidationError") error = handleValidationErrorDB(err);
     if (err.code === 11000) error = handleDuplicateFieldsDB(err);
+
+    // erros vindos do jwt de autenticação;
+    if (err.name === "JsonWebTokenError") error = handleJWTError();
+    if (err.name === "TokenExpiredError") error = handleJWTExpiredError();
 
     sendErrorProd(error, res);
   }
