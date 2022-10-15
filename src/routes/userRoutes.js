@@ -13,6 +13,11 @@ router.patch(
   authController.protect,
   authController.updatePassword
 );
+
+router
+  .route("/me")
+  .patch(authController.protect, userController.updateMe)
+  .delete(authController.protect, userController.inactivateMe);
 router
   .route("/")
   .get(userController.getAllUsers)

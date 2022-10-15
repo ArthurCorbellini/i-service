@@ -41,22 +41,30 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
-
   next();
 });
 
 // roda antes do "save" e verifica se o password foi modificado;
 userSchema.pre("save", function (next) {
   if (!this.isModified("password") || this.isNew) return next();
-
   this.passwordChangedAt = Date.now();
+  next();
+});
+
+// força que qualquer .find nunca traga registros inativos;
+userSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
   next();
 });
 
