@@ -1,0 +1,41 @@
+{
+  "warn.databaseConnectionSuccessful": "Conexão com o banco realizada.",
+  "warn.appRunningPort": "App rodando na porta {{port}}...",
+  "warn.queryTime": "-> Duração da consulta: {{time}} ms.",
+
+  "msg.forgotYourPasswordEmailMessage": "Esqueceu sua senha? Envie uma requisição PATCH com sua nova senha e com a confirmação da senha para: \n{{resetURL}}.\n\nSe não foi você, por favor ignore este e-mail.",
+  "msg.forgotYourPasswordEmailSubject": "Seu token para alteração de senha (valido por 10 min)",
+  "msg.tokenSentToEmail": "Token para alteração de senha enviado por e-mail.",
+
+  "vld.required": "O campo '{{field}}' é obrigatório.",
+  "vld.maxlength": "O campo '{{field}}' deve possuir {{size}} caracteres ou menos.",
+  "vld.minlength": "O campo '{{field}}' deve possuir {{size}} caracteres ou mais.",
+  "vld.enumType": "O campo '{{field}}' aceita apenas os valores '{{values}}'.",
+  "vld.min": "O campo '{{field}}' deve ter valores acima de {{value}}",
+  "vld.max": "O campo '{{field}}' deve ter valores abaixo de {{value}}",
+  "vld.invalidField": "Campo '{{field}}' inválido.",
+  "vld.userPasswordConfirm": "As senhas informadas não conferem.",
+  "vld.tourPriceDiscount": "O campo 'priceDiscount' precisa ser menor que o campo 'price'",
+
+  "error.urlNotFound": "Não foi possível encontrar o path '{{url}}' no servidor.",
+  "error.pleaseProvideEmailAndPassword": "Por favor informe o seu e-mail e sua senha.",
+  "error.incorrectEmailOrPassword": "E-mail ou senha incorreto.",
+  "error.youAreNotLoggedIn": "Você não está logado. Por favor efetue o log in para ter acesso.",
+  "error.userOfThisTokenDoesNoLongerExist": "O usuário vinculado a este token já não existe mais.",
+  "error.userRecentlyChangedPassword": "A senha do usuário foi alterada recentemente. Por favor, efetue o log in novamente.",
+  "error.noUserWithThisEmail": "Não existe usuário cadastrado com este e-mail.",
+  "error.sendingEmail": "Houve um erro ao enviar o e-mail. Tente novamente mais tarde.",
+  "error.tokenInvalidOrExpired": "Token inválido ou expirado.",
+  "error.yourCurrentPasswordIsWrong": "Sua senha atual está errada.",
+  "error.handleCastErrorDB": "Inválido {{path}}: {{value}}.",
+  "error.handleDuplicateFieldsDB": "O valor '{{value}}' já existe para o campo '{{key}}'. Use outro valor.",
+  "error.handleValidationErrorDB": "Input data inválido: {{errors}}.",
+  "error.handleJWTError": "Token inválido. Por favor efetue o log in novamente.",
+  "error.handleJWTExpiredError": "Token expirado. Por favor efetue o log in novamente.",
+  "error.somethingWentWrong": "Alguma coisa deu errado. Por favor, entre em contato com o administrador do sistema.",
+  "error.registerNotFoundWithId": "Nenhum registro encontrado com o id '{{id}}'.",
+  "error.thisRouteIsNotForPasswordUpdates": "Esta rota não é para atualização de senhas. Por favor, use a rota '/updateMyPassword'.",
+  "error.permission": "Você não possui permissão para fazer esta ação.",
+
+  "": ""
+}

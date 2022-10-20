@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv"); // Salva na aplicação as variáveis de ambiente listada no arquivo de configuração;
+const msg = require("./languages/pt-BR.json");
 
 // todos os erros que ocorrem em código síncrono e que não forem tratados em nenhum lugar são chamados de "uncaught
 // exceptions" e irão acionar o eventListener abaixo:
@@ -25,14 +26,11 @@ mongoose
     useCreateIndex: true,
     useFindAndModify: false,
   })
-  .then(() => console.log("Database connection Successful!"));
-
-// Lista as variáveis de ambiente da aplicação;
-// console.log(process.env);
+  .then(() => console.log(msg["warn.databaseConnectionSuccessful"]));
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
-  console.log(`App running on port ${port}...`);
+  console.log(msg["warn.appRunningPort"].replace("{{port}}", port));
 });
 
 // caso alguma promessa for rejeitada fora do escopo do Express e essa promessa não for tratada em

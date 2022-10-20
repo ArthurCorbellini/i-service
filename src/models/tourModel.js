@@ -1,38 +1,64 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
+const msg = require("../../languages/pt-BR.json");
 
 const schema = mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Name required!"],
+      required: [true, msg["vld.required"].replace("{{field}}", "name")],
       unique: true,
       trim: true,
-      maxlength: [40, "Name less or equal than 40 characteres"],
-      minlength: [10, "Name more or equal than 10 characteres"],
+      maxlength: [
+        40,
+        msg["vld.maxlength"]
+          .replace("{{field}}", "name")
+          .replace("{{size}}", "40"),
+      ],
+      minlength: [
+        10,
+        msg["vld.minlength"]
+          .replace("{{field}}", "name")
+          .replace("{{size}}", "10"),
+      ],
     },
     slug: String,
     duration: {
       type: Number,
-      required: [true, "Duration required!"],
+      required: [true, msg["vld.required"].replace("{{field}}", "duration")],
     },
     maxGroupSize: {
       type: Number,
-      required: [true, "MaxGroupSize required!"],
+      required: [
+        true,
+        msg["vld.required"].replace("{{field}}", "maxGroupSize"),
+      ],
     },
     difficulty: {
       type: String,
-      required: [true, "Difficulty required!"],
+      required: [true, msg["vld.required"].replace("{{field}}", "difficulty")],
       enum: {
         values: ["easy", "medium", "difficult"],
-        message: "Difficulty is either: easy, medium ou difficult",
+        message: msg["vld.enumType"]
+          .replace("{{field}}", "difficulty")
+          .replace("{{values}}", "easy/medium/difficult"),
       },
     },
     ratingsAverage: {
       type: Number,
       default: 4.5,
-      min: [1, "RatingsAverage must be above 1.0"],
-      max: [5, "RatingsAverage must be below 5.0"],
+      min: [
+        1,
+        msg["vld.min"]
+          .replace("{{field}}", "ratingsAverage")
+          .replace("{{value}}", "1.0"),
+      ],
+      max: [
+        5,
+        msg["vld.max"]
+          .replace("{{field}}", "ratingsAverage")
+          .replace("{{value}}", "5.0"),
+      ],
     },
     ratingsQuantity: {
       type: Number,
@@ -40,7 +66,7 @@ const schema = mongoose.Schema(
     },
     price: {
       type: Number,
-      required: [true, "Price required!"],
+      required: [true, msg["vld.required"].replace("{{field}}", "price")],
     },
     priceDiscount: {
       type: Number,
@@ -50,13 +76,13 @@ const schema = mongoose.Schema(
           // logo, em updates, essa functon não vai funcionar
           return val < this.price;
         },
-        message: "PriceDiscount ({VALUE}) must be less than the price",
+        message: msg["vld.tourPriceDiscount"],
       },
     },
     summary: {
       type: String,
       trim: true,
-      required: [true, "Summary required!"],
+      required: [true, msg["vld.required"].replace("{{field}}", "summary")],
     },
     description: {
       type: String,
@@ -64,7 +90,7 @@ const schema = mongoose.Schema(
     },
     imageCover: {
       type: String,
-      required: [true, "ImageCover required!"],
+      required: [true, msg["vld.required"].replace("{{field}}", "imageCover")],
     },
     images: [String],
     createdAt: {
@@ -118,7 +144,9 @@ schema.pre(/^find/, function (next) {
 
 // Query middleware: roda DEPOIS de qualquer método que começa com .find...
 schema.post(/^find/, function (docs, next) {
-  console.log(`Query took ${Date.now() - this.start} ms`);
+  console.log(
+    msg["warn.queryTime"].replace("{{time}}", Date.now() - this.start)
+  );
   next();
 });
 

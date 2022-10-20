@@ -3,6 +3,7 @@
 const express = require("express");
 const morgan = require("morgan");
 
+const msg = require("../languages/pt-BR.json");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
 const tourRouter = require("./routes/tourRoutes");
@@ -25,7 +26,12 @@ app.use("/api/v1/users", userRouter);
 app.all("*", (req, res, next) => {
   // se a função next() receber um parâmetro, não importa qual for, o Express vai automaticamente
   // assumir que é um erro e pular direto para o middleware de error handling;
-  next(new AppError(`Can't find ${req.originalUrl} on server`), 404);
+  next(
+    new AppError(
+      msg["error.urlNotFound"].replace("{{url}}", req.originalUrl),
+      404
+    )
+  );
 });
 
 // error handler middleware

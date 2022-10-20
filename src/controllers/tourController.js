@@ -1,3 +1,4 @@
+const msg = require("../../languages/pt-BR.json");
 const Tour = require("../models/tourModel");
 const APIFeatures = require("../utils/apiFeatures");
 const catchAsync = require("../utils/catchAsync");
@@ -34,7 +35,13 @@ exports.getTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
 
   // devolve um 404 se não encontrar um document com o id passado por parâmetro
-  if (!tour) return next(new AppError("No tour found with that id", 404));
+  if (!tour) {
+    const errorMessage = msg["error.registerNotFoundWithId"].replace(
+      "{{id}}",
+      req.params.id
+    );
+    return next(new AppError(errorMessage, 404));
+  }
 
   res.status(200).json({
     status: "success",
@@ -63,7 +70,13 @@ exports.updateTour = catchAsync(async (req, res, next) => {
     runValidators: true,
   });
 
-  if (!tour) return next(new AppError("No tour found with that id", 404));
+  if (!tour) {
+    const errorMessage = msg["error.registerNotFoundWithId"].replace(
+      "{{id}}",
+      req.params.id
+    );
+    return next(new AppError(errorMessage, 404));
+  }
 
   res.status(200).json({
     status: "success",
@@ -76,7 +89,13 @@ exports.updateTour = catchAsync(async (req, res, next) => {
 exports.deleteTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findByIdAndDelete(req.params.id);
 
-  if (!tour) return next(new AppError("No tour found with that id", 404));
+  if (!tour) {
+    const errorMessage = msg["error.registerNotFoundWithId"].replace(
+      "{{id}}",
+      req.params.id
+    );
+    return next(new AppError(errorMessage, 404));
+  }
 
   res.status(204).json({
     status: "success",

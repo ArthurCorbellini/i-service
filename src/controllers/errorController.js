@@ -1,31 +1,35 @@
-// --------------------- Error handler
-
+const msg = require("../../languages/pt-BR.json");
 const AppError = require("../utils/appError");
 
-const handleCastErrorDB = (err) => {
-  const message = `Invalid ${err.path}: ${err.value}.`;
-  return new AppError(message, 400);
-};
+const handleCastErrorDB = (err) =>
+  new AppError(
+    msg["error.handleCastErrorDB"]
+      .replace("{{path}}", err.path)
+      .replace("{{value}}", err.value),
+    400
+  );
 
-const handleDuplicateFieldsDB = (err) => {
-  const key = Object.keys(err.keyValue)[0];
-  const value = Object.values(err.keyValue)[0];
-  const message = `The value "${value}" already exists for the "${key}" field. Use another value.`;
-  return new AppError(message, 400);
-};
+const handleDuplicateFieldsDB = (err) =>
+  new AppError(
+    msg["error.handleDuplicateFieldsDB"]
+      .replace("{{value}}", Object.values(err.keyValue)[0])
+      .replace("{{key}}", Object.keys(err.keyValue)[0]),
+    400
+  );
 
 const handleValidationErrorDB = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
-
-  const message = `Invalid input data: ${errors.join(". ")}.`;
+  const message = msg["error.handleValidationErrorDB"].replace(
+    "{{errors}}",
+    errors.join(". ")
+  );
   return new AppError(message, 400);
 };
 
-const handleJWTError = () =>
-  new AppError("Invalid token. Please log in again!", 401);
+const handleJWTError = () => new AppError(msg["error.handleJWTError"], 401);
 
 const handleJWTExpiredError = () =>
-  new AppError("Token expired. Please log in again!", 401);
+  new AppError(msg["error.handleJWTExpiredError"], 401);
 
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
@@ -50,7 +54,7 @@ const sendErrorProd = (err, res) => {
 
     res.status(500).json({
       status: "error",
-      message: "something went wrong",
+      message: msg["error.somethingWentWrong"],
     });
   }
 };

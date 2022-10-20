@@ -2,40 +2,52 @@ const crypto = require("crypto");
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const msg = require("../../languages/pt-BR.json");
 
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Name required!"],
+    required: [true, msg["vld.required"].replace("{{field}}", "name")],
   },
   email: {
     type: String,
-    require: [true, "E-mail required!"],
+    require: [true, msg["vld.required"].replace("{{field}}", "email")],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, "Invalid e-mail!"],
+    validate: [
+      validator.isEmail,
+      msg["vld.invalidField"].replace("{{field}}", "email"),
+    ],
   },
   photo: String,
   role: {
     type: String,
-    enum: ["user", "guide", "lead-guide", "admin"],
+    enum: {
+      values: ["user", "guide", "lead-guide", "admin"],
+      message: msg["vld.enumType"]
+        .replace("{{field}}", "role")
+        .replace("{{values}}", "user/guide/lead-guide/admin"),
+    },
     default: "user",
   },
   password: {
     type: String,
-    required: [true, "Password required!"],
+    required: [true, msg["vld.required"].replace("{{field}}", "password")],
     minlength: 6,
     select: false,
   },
   passwordConfirm: {
     type: String,
-    required: [true, "Confirm your password!"],
+    required: [
+      true,
+      msg["vld.required"].replace("{{field}}", "passwordConfirm"),
+    ],
     validate: {
       // esse  validator só funciona em "User.create(..." ou "User.save(...";
       validator: function (el) {
         return el === this.password;
       },
-      message: "Passwords are not the same!",
+      message: msg["vld.userPasswordConfirm"],
     },
   },
   passwordChangedAt: Date,
