@@ -6,9 +6,9 @@ const msg = require("./languages/pt-BR.json");
 // exceptions" e irão acionar o eventListener abaixo:
 //  -> esse eventListener precisa ficar no topo da aplicação;
 process.on("uncaughtException", (err) => {
-  console.log(" ------------ UNCAUGHT EXCEPTION!");
+  console.log(" -> UNCAUGHT EXCEPTION:");
   console.log(err.name, err.message);
-  console.log(" ------------ UNCAUGHT EXCEPTION! Shutting down!");
+  console.log(" -> Shutting down.");
   process.exit(1);
 });
 
