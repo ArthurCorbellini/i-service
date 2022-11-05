@@ -15,6 +15,8 @@ const AppError = require("./utils/appError");
 
 const tourRouter = require("./routes/tourRoutes");
 const userRouter = require("./routes/userRoutes");
+const jobRouter = require("./routes/jobRoutes");
+const reviewRouter = require("./routes/reviewRoutes");
 
 const app = express();
 
@@ -62,6 +64,12 @@ app.use(express.static(`${__dirname}/public`));
 //  -> whitelist dos parâmetros ignorados pelo hpp na query string;
 app.use("/api/v1/tours", hpp({ whitelist: hppWhitelist.tour }), tourRouter);
 app.use("/api/v1/users", hpp({ whitelist: hppWhitelist.user }), userRouter);
+app.use("/api/v1/jobs", hpp({ whitelist: hppWhitelist.job }), jobRouter);
+app.use(
+  "/api/v1/reviews",
+  hpp({ whitelist: hppWhitelist.review }),
+  reviewRouter
+);
 
 // caso o request não acerte nenhuma url acima, ele vai parar no router abaixo
 app.all("*", (req, res, next) => {

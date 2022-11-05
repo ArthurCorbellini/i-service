@@ -4,61 +4,67 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const msg = require("../../languages/pt-BR.json");
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, msg["vld.required"].replace("{{field}}", "name")],
-  },
-  email: {
-    type: String,
-    require: [true, msg["vld.required"].replace("{{field}}", "email")],
-    unique: true,
-    lowercase: true,
-    validate: [
-      validator.isEmail,
-      msg["vld.invalidField"].replace("{{field}}", "email"),
-    ],
-  },
-  photo: String,
-  role: {
-    type: String,
-    enum: {
-      values: ["user", "guide", "lead-guide", "admin"],
-      message: msg["vld.enumType"]
-        .replace("{{field}}", "role")
-        .replace("{{values}}", "user/guide/lead-guide/admin"),
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, msg["vld.required"].replace("{{field}}", "name")],
     },
-    default: "user",
-  },
-  password: {
-    type: String,
-    required: [true, msg["vld.required"].replace("{{field}}", "password")],
-    minlength: 6,
-    select: false,
-  },
-  passwordConfirm: {
-    type: String,
-    required: [
-      true,
-      msg["vld.required"].replace("{{field}}", "passwordConfirm"),
-    ],
-    validate: {
-      // esse  validator só funciona em "User.create(..." ou "User.save(...";
-      validator: function (el) {
-        return el === this.password;
+    email: {
+      type: String,
+      require: [true, msg["vld.required"].replace("{{field}}", "email")],
+      unique: true,
+      lowercase: true,
+      validate: [
+        validator.isEmail,
+        msg["vld.invalidField"].replace("{{field}}", "email"),
+      ],
+    },
+    photo: String,
+    role: {
+      type: String,
+      enum: {
+        values: ["user", "admin"],
+        message: msg["vld.enumType"]
+          .replace("{{field}}", "role")
+          .replace("{{values}}", "user/admin"),
       },
-      message: msg["vld.userPasswordConfirm"],
+      default: "user",
+    },
+    password: {
+      type: String,
+      required: [true, msg["vld.required"].replace("{{field}}", "password")],
+      minlength: 6,
+      select: false,
+    },
+    passwordConfirm: {
+      type: String,
+      required: [
+        true,
+        msg["vld.required"].replace("{{field}}", "passwordConfirm"),
+      ],
+      validate: {
+        // esse  validator só funciona em "User.create(..." ou "User.save(...";
+        validator: function (el) {
+          return el === this.password;
+        },
+        message: msg["vld.userPasswordConfirm"],
+      },
+    },
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
     },
   },
-  passwordChangedAt: Date,
-  passwordResetToken: String,
-  passwordResetExpires: Date,
-  active: {
-    type: Boolean,
-    default: true,
-    select: false,
-  },
-});
+  {
+    toJSON: { virtuals: true },
+    toOject: { virtuals: true },
+  }
+);
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
@@ -97,7 +103,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
     10
   );
 
-  return JWTTimestamp < changedTimestamp;
+  return JWTTimestamp <= changedTimestamp;
 };
 
 userSchema.methods.createPasswordResetToken = function () {

@@ -7,5 +7,6 @@
     "maxGroupSize",
     "difficulty",
     "price"
-  ]
+  ],
+  "job": ["price"]
 }

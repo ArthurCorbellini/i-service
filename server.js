@@ -36,9 +36,9 @@ const server = app.listen(port, () => {
 // caso alguma promessa for rejeitada fora do escopo do Express e essa promessa não for tratada em
 // nenhum outro lugar, o eventListener abaixo é acionado;
 process.on("unhandledRejection", (err) => {
-  console.log(" ------------ UNHANDLED REJECTION!");
+  console.log(" -> UNHANDLED REJECTION:");
   console.log(err.name, err.message);
-  console.log(" ------------ UNHANDLED REJECTION! Shutting down!");
+  console.log(" -> Shutting down.");
   server.close(() => {
     process.exit(1);
   });
