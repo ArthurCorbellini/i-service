@@ -28,22 +28,20 @@ const jobSchema = mongoose.Schema(
       ref: "User",
       required: [true, msg["vld.required"].replace("{{field}}", "provider")],
     },
-    location: [
-      {
-        type: {
-          type: String,
-          default: "Point",
-          enum: ["Point"],
-        },
-        coordinates: [Number],
-        address: String,
-        description: String,
+    location: {
+      type: {
+        type: String,
+        default: "Point",
+        enum: ["Point"],
       },
-    ],
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
     // ratingsAverage
     // ratingsQuantity
-    // imageCover
-    // images
+    imageCover: String,
+    images: [String],
     createdAt: {
       type: Date,
       default: Date.now(),
