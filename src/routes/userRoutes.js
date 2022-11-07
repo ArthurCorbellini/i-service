@@ -8,20 +8,19 @@ router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 router.post("/forgotPassword", authController.forgotPassword);
 router.patch("/resetPassword/:token", authController.resetPassword);
-router.patch(
-  "/updateMyPassword",
-  authController.protect,
-  authController.updatePassword
-);
 
+// "protect" em todas as rotas depois deste middleware;
+router.use(authController.protect);
+router.patch("/updateMyPassword", authController.updatePassword);
 router
   .route("/me")
-  .patch(authController.protect, userController.updateMe)
-  .delete(authController.protect, userController.inactivateMe);
-router
-  .route("/")
-  .get(userController.getAllUsers)
-  .post(userController.createUser);
+  .get(userController.getMe, userController.getUser)
+  .patch(userController.updateMe)
+  .delete(userController.inactivateMe);
+
+// "restrict to admin" em todas as rotas depois deste middleware;
+router.use(authController.restrictTo("admin"));
+router.route("/").get(userController.getAllUsers);
 router
   .route("/:id")
   .get(userController.getUser)

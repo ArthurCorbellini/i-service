@@ -10,11 +10,23 @@ router.use("/:jobId/reviews", reviewRouter);
 router
   .route("/")
   .get(jobController.getAllJobs)
-  .post(authController.protect, jobController.createJob);
+  .post(
+    authController.protect,
+    authController.restrictTo("user"),
+    jobController.createJob
+  );
 router
   .route("/:id")
   .get(jobController.getJob)
-  .patch(authController.protect, jobController.updateJob)
-  .delete(authController.protect, jobController.deleteJob);
+  .patch(
+    authController.protect,
+    authController.restrictTo("user"),
+    jobController.updateJob
+  )
+  .delete(
+    authController.protect,
+    authController.restrictTo("user"),
+    jobController.deleteJob
+  );
 
 module.exports = router;

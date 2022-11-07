@@ -6,18 +6,20 @@ const authController = require("../controllers/authController");
 //  -> .../jobs/:jobId/reviews, vai cair no router "/";
 const router = express.Router({ mergeParams: true });
 
+// "protect" em todas as rotas depois deste middleware;
+router.use(authController.protect);
 router
   .route("/")
   .get(reviewController.getAllReviews)
   .post(
-    authController.protect,
     authController.restrictTo("user"),
+    reviewController.setJobUserIds,
     reviewController.createReview
   );
 router
   .route("/:id")
   .get(reviewController.getReview)
-  .patch(authController.protect, reviewController.updateReview)
-  .delete(authController.protect, reviewController.deleteReview);
+  .patch(reviewController.updateReview)
+  .delete(reviewController.deleteReview);
 
 module.exports = router;
