@@ -38,8 +38,14 @@ const jobSchema = mongoose.Schema(
       address: String,
       description: String,
     },
-    // ratingsAverage
-    // ratingsQuantity
+    ratingsAverage: {
+      type: Number,
+      set: (val) => Math.round(val * 10) / 10, // 4,5555 -> 45,5555 -> 46 -> 4,6
+    },
+    ratingsQuantity: {
+      type: Number,
+      default: 0,
+    },
     imageCover: String,
     images: [String],
     createdAt: {
@@ -57,6 +63,12 @@ const jobSchema = mongoose.Schema(
     toOject: { virtuals: true },
   }
 );
+
+// indexação pelo campo price;
+//  -> essa indexação serve para armazenar o campo price em ordem crescente (1) ou ordem decrescente (-1) em um index;
+//  -> exemplo: caso haja uma requisição ".../jobs?price[lt]=1000", ele não precisa varrer todos os docs da coleção
+//     pois existe um index do campo price em ordem crescente;
+jobSchema.index({ price: 1 });
 
 // cria um campo "review" no "job" e popula com as reviews que apontam para este mesmo job;
 //  -> não persiste a "review" no document "job", apenas injeta um model dentro do outro;
