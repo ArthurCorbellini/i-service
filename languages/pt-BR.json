@@ -37,6 +37,7 @@
   "error.thisRouteIsNotForPasswordUpdates": "Esta rota não é para atualização de senhas. Por favor, use a rota '/updateMyPassword'.",
   "error.permission": "Você não possui permissão para fazer esta ação.",
   "error.toManyRequests": "O seu IP ultrapassou o limite de {{max}} requisições por hora. Tente novamente mais tarde.",
+  "error.latlngFormat": "Por favor informe a latitude e a longitude no formato 'lat,lng'.",
 
   "": ""
 }

@@ -69,6 +69,9 @@ const jobSchema = mongoose.Schema(
 //  -> exemplo: caso haja uma requisição ".../jobs?price[lt]=1000", ele não precisa varrer todos os docs da coleção
 //     pois existe um index do campo price em ordem crescente;
 jobSchema.index({ price: 1 });
+// é necessiário um index especial do tipo "2dsphere" para representar pontos reais na Terra como uma esfera;
+//  -> caso for apenas pontos em um plano dimensional, usar o index "2d";
+jobSchema.index({ location: "2dsphere" });
 
 // cria um campo "review" no "job" e popula com as reviews que apontam para este mesmo job;
 //  -> não persiste a "review" no document "job", apenas injeta um model dentro do outro;

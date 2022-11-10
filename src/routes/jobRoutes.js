@@ -8,6 +8,10 @@ const router = express.Router();
 router.use("/:jobId/reviews", reviewRouter);
 
 router
+  .route("/jobs-within/:distance/center/:latlng/unit/:unit")
+  .get(jobController.getJobsWithin);
+router.route("/distances/:latlng/unit/:unit").get(jobController.getDistances);
+router
   .route("/")
   .get(jobController.getAllJobs)
   .post(
