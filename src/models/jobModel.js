@@ -14,6 +14,17 @@ const jobSchema = mongoose.Schema(
           .replace("{{size}}", "40"),
       ],
     },
+    summary: {
+      type: String,
+      required: [true, msg["vld.required"].replace("{{field}}", "summary")],
+      trim: true,
+      maxlength: [
+        40,
+        msg["vld.maxlength"]
+          .replace("{{field}}", "summary")
+          .replace("{{size}}", "40"),
+      ],
+    },
     description: {
       type: String,
       required: [true, msg["vld.required"].replace("{{field}}", "description")],

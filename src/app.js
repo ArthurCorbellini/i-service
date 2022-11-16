@@ -1,5 +1,6 @@
 // app.js serve apenas para parâmetros de configuração da aplicação atrelados ao Express;
 
+const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 const hpp = require("hpp");
@@ -17,8 +18,15 @@ const tourRouter = require("./routes/tourRoutes");
 const userRouter = require("./routes/userRoutes");
 const jobRouter = require("./routes/jobRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
+const viewRouter = require("./routes/viewRoutes");
 
 const app = express();
+
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "views"));
+console.log(path.join(__dirname, "views"));
+// serving static files;
+app.use(express.static(path.join(__dirname, "public")));
 
 // ----------------------------------------
 // --------------------- Global Middlewares
@@ -55,12 +63,12 @@ app.use(xss());
 //  -> evita que haja parâmetros duplicados na query string;
 app.use(hpp());
 
-// serving static files;
-app.use(express.static(`${__dirname}/public`));
-
 // -----------------------------------------
 // --------------------- Routes (middleware)
 // -----------------------------------------
+
+// rota das views
+app.use("/", viewRouter);
 //  -> whitelist dos parâmetros ignorados pelo hpp na query string;
 app.use("/api/v1/tours", hpp({ whitelist: hppWhitelist.tour }), tourRouter);
 app.use("/api/v1/users", hpp({ whitelist: hppWhitelist.user }), userRouter);

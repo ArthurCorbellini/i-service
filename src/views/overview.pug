@@ -1,0 +1,44 @@
+extends base
+
+block content
+  main.main 
+    .card-container
+
+      each job in jobs
+        .card
+          .card__header
+            .card__picture
+              .card__picture-overlay &nbsp;
+              img.card__picture-img(src=`/img/jobs/${job.imageCover}`, alt=`${job.name}`)
+            h3.heading-tertirary
+              span= job.name
+
+          .card__details
+            h4.card__sub-heading=`${job.provider.name}`
+            p.card__text= `${job.summary}`
+            .card__data
+              svg.card__icon
+                use(xlink:href="/img/icons.svg#icon-map-pin")
+              span= job.location.description
+            //- .card__data
+            //-   svg.card__icon
+            //-     use(xlink:href="/img/icons.svg#icon-calendar")
+            //-   span= job.createAt.toLocaleString("en-us", { month: "long", year: "numeric" })
+            //- .card__data
+            //-   svg.card__icon
+            //-     use(xlink:href='/img/icons.svg#icon-flag')
+            //-   span 3 stops
+            //- .card__data
+            //-   svg.card__icon
+            //-     use(xlink:href='/img/icons.svg#icon-user')
+            //-   span 25 people
+
+          .card__footer
+            p
+              span.card__footer-value= `R$ ${job.price}`
+              //- span.card__footer-text per job
+            p.card__ratings
+              span.card__footer-value= job.ratingsAverage
+              | 
+              span.card__footer-text= `rating (${job.ratingsQuantity} avaliações)`
+            a.btn.btn--green.btn--small(href=`/job/${job.id}`) Detalhes

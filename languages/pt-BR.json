@@ -39,5 +39,7 @@
   "error.toManyRequests": "O seu IP ultrapassou o limite de {{max}} requisições por hora. Tente novamente mais tarde.",
   "error.latlngFormat": "Por favor informe a latitude e a longitude no formato 'lat,lng'.",
 
+  "label.allJobs": "Todos os serviços",
+
   "": ""
 }

@@ -1,0 +1,79 @@
+extends base
+include _reviewCard
+
+block append head  
+  script(src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js')
+  link(href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet')
+
+mixin overviewBox(icon, label, text)
+  .overview-box__detail
+    svg.overview-box__icon
+      use(xlink:href=`/img/icons.svg#${icon}`)
+    span.overview-box__label= label
+    span.overview-box__text= text
+
+block content 
+  section.section-header
+    .header__hero
+      .header__hero-overlay &nbsp;
+      img.header__hero-img(src=`/img/jobs/${job.imageCover}`, alt=`${job.name}`)
+
+    .heading-box
+      h1.heading-primary
+        span= `Serviço de ${job.name}`
+      .heading-box__group
+        //- .heading-box__detail
+        //-   svg.heading-box__icon
+        //-     use(xlink:href='/img/icons.svg#icon-clock')
+        //-   span.heading-box__text 10 days
+        .heading-box__detail
+          svg.heading-box__icon
+            use(xlink:href='/img/icons.svg#icon-map-pin')
+          span.heading-box__text= job.location.description
+
+  section.section-description
+    .overview-box
+      div
+        .overview-box__group
+          h2.heading-secondary.ma-bt-lg Informações
+          +overviewBox("icon-shopping-bag", "Preço", `R$ ${job.price}`)
+          +overviewBox("icon-star", "Rating", `${job.ratingsAverage} / 5`)
+          +overviewBox("icon-user", "Avaliações", `${job.ratingsQuantity}`)
+
+        .overview-box__group
+          h2.heading-secondary.ma-bt-lg Prestador do Serviço
+          .overview-box__detail
+            img.overview-box__img(src=`/img/users/${job.provider.photo}`, alt=`${job.provider.name}`)
+            span.overview-box__label= job.provider.name
+            span= job.provider.email
+
+    .description-box
+      h2.heading-secondary.ma-bt-lg= `Serviço de ${job.name}`
+      - const paragraph = job.description.split("\n");
+      each p in paragraph
+        p.description__text= p
+
+  section.section-pictures
+    each img, i in job.images
+      .picture-box
+        img.picture-box__img(src=`/img/jobs/${img}`, alt=`Job image ${i + 1}`, class=`picture-box__img--${i + 1}`)
+
+  section.section-map
+    #map(data-locations=`${JSON.stringify(job.location)}`)
+    script(src="/js/mapbox.js")
+
+  section.section-reviews
+    .reviews
+      each review in job.reviews
+        +reviewCard(review)
+
+  section.section-cta
+    .cta
+      .cta__img.cta__img--logo
+        img(src='/img/logo-white.png', alt='iService logo')
+      img.cta__img.cta__img--1(src=`/img/jobs/${job.images[1]}`, alt='Job pic')
+      img.cta__img.cta__img--2(src=`/img/jobs/${job.images[2]}`, alt='Job pic')
+      .cta__content
+        h2.heading-secondary Gostou do que viu?
+        p.cta__text Entre em contato com o anunciante agora mesmo!
+        button.btn.btn--green.span-all-rows Contrate agora!
