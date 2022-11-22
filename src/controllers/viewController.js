@@ -9,7 +9,7 @@ exports.getOverview = catchAsync(async (req, res) => {
   });
 });
 
-exports.getJob = catchAsync(async (req, res) => {
+exports.getJob = catchAsync(async (req, res, next) => {
   const job = await Job.findById(req.params.id).populate({
     path: "reviews",
     fields: "review rating author",
@@ -20,3 +20,9 @@ exports.getJob = catchAsync(async (req, res) => {
     job,
   });
 });
+
+exports.getLoginForm = (req, res) => {
+  res.status(200).render("login", {
+    title: msg["label.logIntoYourAccount"],
+  });
+};

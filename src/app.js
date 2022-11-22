@@ -8,6 +8,7 @@ const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
+const cookieParser = require("cookie-parser");
 
 const msg = require("../languages/pt-BR.json");
 const hppWhitelist = require("./security/hppWhitelist.json");
@@ -24,7 +25,7 @@ const app = express();
 
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
-console.log(path.join(__dirname, "views"));
+
 // serving static files;
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -50,6 +51,8 @@ app.use("/api", limiter);
 
 // body parser, lê os dados do body para req.body;
 app.use(express.json({ limit: "10kb" }));
+// cookie parser, lê os dados dos cookies para req.cookies (que será resgatado no authController);
+app.use(cookieParser());
 
 // Data sanitization contra NoSQL query injections;
 //  -> remove todos os "." e "$" da requisição e da query string, que são operadores do MongoDB;
