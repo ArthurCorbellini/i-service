@@ -1,6 +1,7 @@
 const msg = require("../../languages/pt-BR.json");
 const catchAsync = require("../utils/catchAsync");
 const Job = require("../models/jobModel");
+const AppError = require("../utils/appError");
 
 exports.getOverview = catchAsync(async (req, res) => {
   res.status(200).render("overview", {
@@ -14,6 +15,13 @@ exports.getJob = catchAsync(async (req, res, next) => {
     path: "reviews",
     fields: "review rating author",
   });
+
+  if (!job)
+    return next(
+      new AppError(
+        msg["error.registerNotFoundWithId"].replace("{{id}}", req.params.id)
+      )
+    );
 
   res.status(200).render("job", {
     title: job.name,

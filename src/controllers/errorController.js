@@ -31,32 +31,58 @@ const handleJWTError = () => new AppError(msg["error.handleJWTError"], 401);
 const handleJWTExpiredError = () =>
   new AppError(msg["error.handleJWTExpiredError"], 401);
 
-const sendErrorDev = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status,
-    error: err,
-    message: err.message,
-    stack: err.stack,
+const sendErrorDev = (err, req, res) => {
+  if (req.originalUrl.startsWith("/api")) {
+    // api
+    return res.status(err.statusCode).json({
+      status: err.status,
+      error: err,
+      message: err.message,
+      stack: err.stack,
+    });
+  }
+
+  // rendered website
+  return res.status(err.statusCode).render("error", {
+    title: msg["error.somethingWentWrong"],
+    msg: err.message,
   });
 };
 
-const sendErrorProd = (err, res) => {
-  // erros operacionais: envia o erro ao client
-  if (err.isOperational) {
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message,
-    });
-  }
-  // erros de desenvolvimento (não previstos): envia uma mensagem padrão
-  else {
+const sendErrorProd = (err, req, res) => {
+  // api
+  if (req.originalUrl.startsWith("/api")) {
+    // erros operacionais: envia o erro ao client
+    if (err.isOperational) {
+      return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message,
+      });
+    }
+    // erros de desenvolvimento (não previstos): envia uma mensagem padrão
     console.log("Error", err);
 
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
-      message: msg["error.somethingWentWrong"],
+      message: msg["error.somethingWentWrongFull"],
     });
   }
+
+  // rendered website
+  // erros operacionais: envia o erro ao client
+  if (err.isOperational) {
+    return res.status(err.statusCode).render("error", {
+      title: msg["error.somethingWentWrong"],
+      msg: err.message,
+    });
+  }
+
+  // erros de desenvolvimento (não previstos): envia uma mensagem padrão
+  console.log("Error", err);
+  return res.status(err.statusCode).render("error", {
+    title: msg["error.somethingWentWrong"],
+    msg: msg["error.pleaseTryAgainLater"],
+  });
 };
 
 // ao receber 4 parâmetros no middleware, o express sabe que essa função é um error handling
@@ -65,9 +91,10 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || "error";
 
   if (process.env.NODE_ENV === "development") {
-    sendErrorDev(err, res);
+    sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === "production") {
     let error = { ...err };
+    error.message = err.message;
 
     // erros que não possuem o atributo "isOperational" e também devem ser tratados;
 
@@ -86,6 +113,6 @@ module.exports = (err, req, res, next) => {
     if (err.name === "JsonWebTokenError") error = handleJWTError();
     if (err.name === "TokenExpiredError") error = handleJWTExpiredError();
 
-    sendErrorProd(error, res);
+    sendErrorProd(error, req, res);
   }
 };
