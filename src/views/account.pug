@@ -1,0 +1,58 @@
+extends base
+
+mixin navItem(link, text, icon, active)
+  li(class=`${active ? "side-nav--active" : ""}`)
+    a(href=`${link}`)
+      svg
+        use(xlink:href=`img/icons.svg#icon-${icon}`)
+      | #{text}
+
+block content 
+  main.main
+    .user-view
+      nav.user-view__menu
+        ul.side-nav
+          +navItem("#", "Configurações", "settings", true)
+          +navItem("#", "Meus jobs", "briefcase")
+          +navItem("#", "Minhas reviews", "star")
+          +navItem("#", "Minhas contratações", "credit-card")
+
+        - if(user.role === "admin")
+          .admin-nav
+            h5.admin-nav__heading Gerenciamento
+            ul.side-nav
+              +navItem("#", "Usuários", "users")
+              +navItem("#", "Jobs", "briefcase")
+              +navItem("#", "Reviews", "star")
+              +navItem("#", "Contratações", "credit-card")
+
+      .user-view__content
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Suas confirgurações da conta
+          form.form.form-user-data
+            .form__group
+              label.form__label(for='name') Nome
+              input#name.form__input(type='text', value=`${user.name}`, required)
+            .form__group.ma-bt-md
+              label.form__label(for='email') Endereço de e-mail
+              input#email.form__input(type='email', value=`${user.email}`, required)
+            .form__group.form__photo-upload
+              img.form__user-photo(src=`/img/users/${user.photo ? user.photo : "default.jpg"}` alt=`Fotografia de ${user.name}`)
+              a.btn-text(href='') Alterar imagem
+            .form__group.right
+              button.btn.btn--small.btn--green Salvar configurações
+        .line &nbsp;
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Alterar senha
+          form.form.form-user-settings
+            .form__group
+              label.form__label(for='password-current') Senha atual
+              input#password-current.form__input(type='password', placeholder='••••••', required, minlength='6')
+            .form__group
+              label.form__label(for='password') Nova senha
+              input#password.form__input(type='password', placeholder='••••••', required, minlength='6')
+            .form__group.ma-bt-lg
+              label.form__label(for='password-confirm') Confirmar senha
+              input#password-confirm.form__input(type='password', placeholder='••••••', required, minlength='6')
+            .form__group.right
+              button.btn.btn--small.btn--green Salvar senha
