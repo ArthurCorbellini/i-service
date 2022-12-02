@@ -103,7 +103,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
     10
   );
 
-  return JWTTimestamp <= changedTimestamp;
+  return JWTTimestamp < changedTimestamp;
 };
 
 userSchema.methods.createPasswordResetToken = function () {

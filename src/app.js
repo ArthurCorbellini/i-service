@@ -51,6 +51,7 @@ app.use("/api", limiter);
 
 // body parser, lê os dados do body para req.body;
 app.use(express.json({ limit: "10kb" }));
+app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 // cookie parser, lê os dados dos cookies para req.cookies (que será resgatado no authController);
 app.use(cookieParser());
 

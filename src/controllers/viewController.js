@@ -1,6 +1,7 @@
 const msg = require("../../languages/pt-BR.json");
 const catchAsync = require("../utils/catchAsync");
 const Job = require("../models/jobModel");
+const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 
 exports.getOverview = catchAsync(async (req, res) => {
@@ -40,3 +41,22 @@ exports.getAccount = (req, res) => {
     title: msg["label.yourAccount"],
   });
 };
+
+exports.updateUserData = catchAsync(async (req, res, next) => {
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      name: req.body.name,
+      email: req.body.email,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  res.status(200).render("account", {
+    title: msg["label.yourAccount"],
+    user: updatedUser,
+  });
+});
