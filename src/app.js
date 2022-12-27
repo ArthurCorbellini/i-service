@@ -9,6 +9,7 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const cookieParser = require("cookie-parser");
+const compression = require("compression");
 
 const msg = require("../languages/pt-BR.json");
 const hppWhitelist = require("./security/hppWhitelist.json");
@@ -66,6 +67,9 @@ app.use(xss());
 // Evita parameter pollution;
 //  -> evita que haja parâmetros duplicados na query string;
 app.use(hpp());
+
+// comprime os textos que são mandados para o client;
+app.use(compression());
 
 // -----------------------------------------
 // --------------------- Routes (middleware)

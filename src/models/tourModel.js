@@ -142,13 +142,13 @@ schema.pre(/^find/, function (next) {
   next();
 });
 
-// Query middleware: roda DEPOIS de qualquer método que começa com .find...
-schema.post(/^find/, function (docs, next) {
-  console.log(
-    msg["warn.queryTime"].replace("{{time}}", Date.now() - this.start)
-  );
-  next();
-});
+// // Query middleware: roda DEPOIS de qualquer método que começa com .find...
+// schema.post(/^find/, function (docs, next) {
+//   console.log(
+//     msg["warn.queryTime"].replace("{{time}}", Date.now() - this.start)
+//   );
+//   next();
+// });
 
 // Aggregation middleware: roda ANTES de qualquer pipeline de agregação, nos controllers
 schema.pre("aggregate", function (next) {
