@@ -10,6 +10,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const cookieParser = require("cookie-parser");
 const compression = require("compression");
+const cors = require("cors");
 
 const msg = require("../languages/pt-BR.json");
 const hppWhitelist = require("./security/hppWhitelist.json");
@@ -33,6 +34,21 @@ app.use(express.static(path.join(__dirname, "public")));
 // ----------------------------------------
 // --------------------- Global Middlewares
 // ----------------------------------------
+
+// CORS
+//  -> permite que qualquer url consuma as "simple requests (get e post)" da API;
+//  -> coloca o header Access-Control-Allow-Origin *;
+app.use(cors());
+//  -> abaixo segue exemplo que permite apenas o domínio iService.com consumir a API;
+//     app.use(
+//       cors({
+//         origin: "https://www.iService.com",
+//       })
+//     );
+//  -> permite que qualquer url consuma as "non-simple requests (put, patch e delete) da API";
+app.options("*", cors());
+// app.options("/api/v1/jobs/:id", cors());
+
 // Set security http headers;
 app.use(helmet());
 
